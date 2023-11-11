@@ -1,0 +1,12 @@
+credentials = {
+  app_id="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  secret="supersecret"
+  tenant_id="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  subscription_id="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+// az login --tenant xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+// az account list
+// az account set --subscription xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+// az ad sp create-for-rbac --name my_sp_name --role Contributor --scopes /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+
