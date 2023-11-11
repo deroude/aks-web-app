@@ -29,8 +29,8 @@ jobs:
 
     - name: Echo secrets
       run: |
-        echo $TF_VARS >> terraform.tfvars
-        echo $TF_BACKEND >> config.azurerm.tfbackend
+        echo "$TF_VARS" >> terraform.tfvars
+        echo "$TF_BACKEND" >> config.azurerm.tfbackend
       env:
         TF_BACKEND : ${{secrets.TF_BACKEND}}
         TF_VARS : ${{secrets.TF_VARS}}
