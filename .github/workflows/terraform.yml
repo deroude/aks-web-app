@@ -32,7 +32,8 @@ jobs:
         echo $TF_VARS >> terraform.tfvars
         echo $TF_BACKEND >> config.azurerm.tfbackend
       env:
-        TF_VARS : ${{secrets.TF_BACKEND}}
+        TF_BACKEND : ${{secrets.TF_BACKEND}}
+        TF_VARS : ${{secrets.TF_VARS}}
 
     - name: Az CLI login
       uses: azure/login@v1
