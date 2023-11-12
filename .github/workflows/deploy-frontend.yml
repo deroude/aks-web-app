@@ -1,0 +1,55 @@
+name: 'Deploy Frontend'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/aks-web-frontend
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    name: 'Build and Deploy Frontend'
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup NodeJS
+      uses: actions/setup-node@v1
+      with:
+        node-version: '18.x'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build frontend
+      run: nx run aks-web-frontend:build:production
+
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Upload to Azure Blob
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az storage blob sync --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --account-key ${{ secrets.AZURE_STORAGE_KEY }} --container $web --source ./dist/apps/aks-web-frontend
+
+    - name: Azure logout
+      run: |
+        az logout
+      if: always()
