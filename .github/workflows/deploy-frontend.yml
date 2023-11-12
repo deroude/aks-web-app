@@ -36,7 +36,7 @@ jobs:
       run: npm install
 
     - name: Build frontend
-      run: nx run aks-web-frontend:build:production
+      run: npx nx run aks-web-frontend:build:production
 
     - name: Azure login
       uses: azure/login@v1
