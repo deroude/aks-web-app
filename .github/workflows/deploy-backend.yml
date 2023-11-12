@@ -52,7 +52,7 @@ jobs:
 
       - name: Build and push Docker image to ACR
         run: |
-          docker build . -f apps/aks-web-app/Dockerfile -t aks-web-app${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }}
+          docker build -f apps/aks-web-app/Dockerfile -t aks-web-app${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }} .
           docker push ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app --all-tags
 
       - name: Set AKS context
