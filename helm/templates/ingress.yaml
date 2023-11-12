@@ -21,6 +21,6 @@ spec:
           backend:
             service:
               name: aks-web-service
-            port:
-              number: 80
+              port:
+                number: 80
 {{- end }}
