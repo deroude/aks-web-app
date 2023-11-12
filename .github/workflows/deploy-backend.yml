@@ -1,0 +1,57 @@
+name: 'Deploy Backend'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/aks-web-app
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    name: 'Build and Deploy Backend'
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build backend
+        run: npx nx run aks-web-app:build:production
+
+      - name: Login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.ACR_REGISTRY_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_REGISTRY_USERNAME }}
+          password: ${{ secrets.ACR_REGISTRY_PASSWORD }}
+
+      - name: Build and push Docker image to ACR
+        run: |
+          docker build -f apps/aks-web-app/Dockerfile . -t aks-web-app ${{ env.REGISTRY_NAME }}.azurecr.io/aks-web-app:latest ${{ env.REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }}
+          docker push ${{ env.REGISTRY_NAME }}.azurecr.io/aks-web-app --all-tags
+
+      - name: Set AKS context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.AKS_CLUSTER_NAME }}
+          resource-group: ${{ env.AKS_CLUSTER_RESOURCE_GROUP }}

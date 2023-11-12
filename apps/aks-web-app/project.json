@@ -64,6 +64,10 @@
       "options": {
         "jestConfig": "apps/aks-web-app/jest.config.ts"
       }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/aks-web-app/Dockerfile . -t aks-web-app"
     }
   },
   "tags": []

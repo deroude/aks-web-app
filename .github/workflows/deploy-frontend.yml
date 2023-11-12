@@ -33,7 +33,7 @@ jobs:
         node-version: '18.x'
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Build frontend
       run: npx nx run aks-web-frontend:build:production
