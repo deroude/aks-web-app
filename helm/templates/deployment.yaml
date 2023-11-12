@@ -27,7 +27,6 @@ spec:
             - name: express-port
               containerPort: {{ .Values.service.internalPort }}
               protocol: TCP
-              appProtocol: HTTP
           livenessProbe:
             httpGet:
               path: /
