@@ -54,6 +54,27 @@ output "key_data" {
   value = jsondecode(azapi_resource_action.ssh_public_key_gen.output).publicKey
 }
 
+resource "azurerm_virtual_network" "apim-aks" {
+  name                = "apim-aks-vnet"
+  address_space       = ["10.10.0.0/16"]
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+}
+
+resource "azurerm_subnet" "aks" {
+  name                 = "aks-subnet"
+  resource_group_name  = "${azurerm_resource_group.rg.name}"
+  virtual_network_name = "${azurerm_virtual_network.apim-aks.name}"
+  address_prefix       = "10.10.1.0/24"
+}
+
+resource "azurerm_subnet" "apim" {
+  name                 = "apim-subnet"
+  resource_group_name  = "${azurerm_resource_group.rg.name}"
+  virtual_network_name = "${azurerm_virtual_network.apim-aks.name}"
+  address_prefix       = "10.10.2.0/24"
+}
+
 // create AKS cluster
 
 resource "azurerm_kubernetes_cluster" "k8s" {
@@ -70,6 +91,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     name       = "agentpool"
     vm_size    = "Standard_D2_v2"
     node_count = var.k8s_node_count
+    vnet_subnet_id = "${azurerm_subnet.aks.id}"
   }
   linux_profile {
     admin_username = "whistle"
@@ -81,5 +103,25 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   network_profile {
     network_plugin    = "kubenet"
     load_balancer_sku = "standard"
+  }
+}
+
+// Create API Management
+
+resource "azurerm_api_management" "apim" {
+  name                = "whistle-apim"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  publisher_name      = "Valentin Raduti"
+  publisher_email     = "valentin@thedotin.ro"
+
+  sku {
+    name     = "Developer"
+    capacity = 1
+  }
+
+  virtual_network_type = "External"
+  virtual_network_configuration {
+    subnet_id = "${azurerm_subnet.apim.id}"
   }
 }
