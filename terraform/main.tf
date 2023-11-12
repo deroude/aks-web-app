@@ -109,7 +109,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 // Create API Management
 
 resource "azurerm_api_management" "apim" {
-  name                = "whistle-apim"
+  name                = "whistle-api-management"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   publisher_name      = "Valentin Raduti"
