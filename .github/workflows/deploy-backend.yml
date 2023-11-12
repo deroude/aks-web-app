@@ -75,7 +75,7 @@ jobs:
         uses: azure/k8s-bake@v2
         with:
           renderEngine: "helm"
-          helmChart: helm/Chart.yml
+          helmChart: ./helm
           overrides: |
             replicas:1
             image.repository: ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app
