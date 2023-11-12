@@ -90,4 +90,4 @@ jobs:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
-            ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }}
+            ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest
