@@ -13,11 +13,9 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: NodePort
-  exposePort: 30000
-  targetPort: 8080
+  type: ClusterIP
+  targetPort: 80
   internalPort: 3000
-
 
 ingress:
   enabled: true
