@@ -24,17 +24,18 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.targetPort }}
+            - name: express-port
+              containerPort: {{ .Values.service.internalPort }}
               protocol: TCP
+              appProtocol: HTTP
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: express-port
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: express-port
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -10,8 +10,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.internalPort }}
-      targetPort: {{ .Values.service.targetPort }}
+    - targetPort: {{ .Values.service.internalPort }}
+      port: 80
       protocol: TCP
       name: http
   selector:

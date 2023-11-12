@@ -78,8 +78,8 @@ jobs:
           helmChart: ./helm
           overrides: |
             replicas:1
-            image.repository: ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app
-            image.tag: ${{ github.sha }}
+            image.repository:${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app
+            image.tag:${{ github.sha }}
           helm-version: "latest"
         id: bake
 
