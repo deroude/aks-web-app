@@ -19,6 +19,8 @@ spec:
         paths:
         - path: /
           backend:
-            serviceName: aks-web-service
-            servicePort: http
+            service:
+              name: aks-web-service
+            port:
+              number: 80
 {{- end }}
