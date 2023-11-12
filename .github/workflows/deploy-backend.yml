@@ -70,6 +70,7 @@ jobs:
           container-registry-username: ${{ env.ACR_REGISTRY_USERNAME }}
           container-registry-password: ${{ env.ACR_REGISTRY_PASSWORD }}
           secret-name: github-k8s-secret
+          namespace: whistle-app
 
       - name: Bake deployment
         uses: azure/k8s-bake@v2
@@ -89,5 +90,8 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          namespace: whistle-app
+          imagePullSecrets: |
+            github-k8s-secret
           images: |
             ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest
