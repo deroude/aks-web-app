@@ -52,8 +52,8 @@ jobs:
 
       - name: Build and push Docker image to ACR
         run: |
-          docker build -f apps/aks-web-app/Dockerfile -t aks-web-app${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest -t ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }} .
-          docker push ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app --all-tags
+          docker build -f apps/aks-web-app/Dockerfile -t ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest .
+          docker push ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest
 
       - name: Set AKS context
         uses: azure/aks-set-context@v1
@@ -79,7 +79,7 @@ jobs:
           overrides: |
             replicas:1
             image.repository:${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app
-            image.tag:${{ github.sha }}
+            image.tag:latest
           helm-version: "latest"
         id: bake
 
