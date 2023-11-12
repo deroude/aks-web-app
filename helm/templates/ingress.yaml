@@ -14,13 +14,11 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-rules:
-  - http:
-      paths:
-      {{- range .paths }}
-      - path: {{ . }}
-        backend:
-          serviceName: {{ $fullName }}
-          servicePort: http
-     {{- end }}
+  rules:
+    - http:
+        paths:
+        - path: /
+          backend:
+            serviceName: aks-web-service
+            servicePort: http
 {{- end }}

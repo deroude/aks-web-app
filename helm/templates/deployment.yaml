@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: aks-web-deployment
   labels:
     app.kubernetes.io/name: {{ include "helm-chart.name" . }}
     helm.sh/chart: {{ include "helm-chart.chart" . }}
