@@ -65,14 +65,14 @@ resource "azurerm_subnet" "aks" {
   name                 = "aks-subnet"
   resource_group_name  = "${azurerm_resource_group.rg.name}"
   virtual_network_name = "${azurerm_virtual_network.apim-aks.name}"
-  address_prefix       = "10.10.1.0/24"
+  address_prefixes       = "10.10.1.0/24"
 }
 
 resource "azurerm_subnet" "apim" {
   name                 = "apim-subnet"
   resource_group_name  = "${azurerm_resource_group.rg.name}"
   virtual_network_name = "${azurerm_virtual_network.apim-aks.name}"
-  address_prefix       = "10.10.2.0/24"
+  address_prefixes       = "10.10.2.0/24"
 }
 
 // create AKS cluster
@@ -115,10 +115,7 @@ resource "azurerm_api_management" "apim" {
   publisher_name      = "Valentin Raduti"
   publisher_email     = "valentin@thedotin.ro"
 
-  sku {
-    name     = "Developer"
-    capacity = 1
-  }
+  sku_name = "Developer_1"
 
   virtual_network_type = "External"
   virtual_network_configuration {
