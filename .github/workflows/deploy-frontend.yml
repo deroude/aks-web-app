@@ -47,7 +47,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-          az storage blob sync --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --account-key ${{ secrets.AZURE_STORAGE_KEY }} --container $web --source ./dist/apps/aks-web-frontend
+          az storage blob sync --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --account-key ${{ secrets.AZURE_STORAGE_KEY }} --container '$web' --source ./dist/apps/aks-web-frontend
 
     - name: Azure logout
       run: |
