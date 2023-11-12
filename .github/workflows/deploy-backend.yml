@@ -52,7 +52,7 @@ jobs:
 
       - name: Build and push Docker image to ACR
         run: |
-          docker build -f apps/aks-web-app/Dockerfile . -t aks-web-app${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }}
+          docker build . -f apps/aks-web-app/Dockerfile -t aks-web-app${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:latest ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }}
           docker push ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app --all-tags
 
       - name: Set AKS context
@@ -61,3 +61,33 @@ jobs:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
           cluster-name: ${{ env.AKS_CLUSTER_NAME }}
           resource-group: ${{ env.AKS_CLUSTER_RESOURCE_GROUP }}
+
+# Create imagepullsecret for Azure Container registry (ACR)
+      - name: Create imagepullsecret for Azure Container registry (ACR)
+        uses: azure/k8s-actions/k8s-create-secret@master
+        with:
+          container-registry-url: ${{ env.ACR_REGISTRY_NAME }}.azurecr.io
+          container-registry-username: ${{ env.ACR_REGISTRY_USERNAME }}
+          container-registry-password: ${{ env.ACR_REGISTRY_PASSWORD }}
+          secret-name: github-k8s-secret
+
+      - name: Bake deployment
+        uses: azure/k8s-bake@v2
+        with:
+          renderEngine: "helm"
+          helmChart: helm/Chart.yml
+          overrides: |
+            replicas:1
+            image.repository: ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app
+            image.tag: ${{ github.sha }}
+          helm-version: "latest"
+        id: bake
+
+        # Deploys application based on manifest files from previous step
+      - name: Deploy application
+        uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          images: |
+            ${{ env.ACR_REGISTRY_NAME }}.azurecr.io/aks-web-app:${{ github.sha }}

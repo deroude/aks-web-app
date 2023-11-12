@@ -1,0 +1,4 @@
+apiVersion: v2
+name: aks-web-deployment
+description: A Helm chart for deploying the AKS API
+version: 0.1.0
