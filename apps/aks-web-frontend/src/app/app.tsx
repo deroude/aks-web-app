@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from "react";
-import { useAuth } from "react-oidc-context";
+import {useAuth} from "react-oidc-context";
 
 function App() {
   const auth = useAuth();
@@ -22,9 +22,9 @@ function App() {
 
   if (auth.isAuthenticated) {
 
-    fetch("/api/123",{headers: {Authorization: `Bearer ${auth.user?.access_token}`}})
+    fetch("/api/123", {headers: {Authorization: `Bearer ${auth.user?.access_token}`}})
     .then(res => res.json())
-    .then(alert);
+    .then(res => alert(JSON.stringify(res)));
 
     return (
       <div>
