@@ -9,6 +9,9 @@ const oidcConfig = {
   authority: "https://node-seed.eu.auth0.com/",
   client_id: "qrPpGPIQXawU9bpWg64frEXIEOSb9mkX",
   redirect_uri: window.location.origin,
+  extraQueryParams: {
+    audience: 'node-api'
+  }
   // ...
 };
 
