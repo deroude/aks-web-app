@@ -15,7 +15,7 @@ spec:
     - http:
         paths:
         - path: /
-          pathType: PathPrefix
+          pathType: Prefix
           backend:
             service:
               name: aks-web-service
