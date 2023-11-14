@@ -21,6 +21,11 @@ function App() {
   }
 
   if (auth.isAuthenticated) {
+
+    fetch("/api/123",{headers: {Authorization: `Bearer ${auth.user?.access_token}`}})
+    .then(res => res.json())
+    .then(alert);
+
     return (
       <div>
         Hello {auth.user?.profile.sub}{" "}
