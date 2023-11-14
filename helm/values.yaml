@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: aks-web-app.azurecr.io/aks-web-app
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
