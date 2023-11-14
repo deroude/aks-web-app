@@ -5,8 +5,8 @@ const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 const app = express();
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Hello API' });
+app.get('*', (req, res) => {
+  res.send({ message: 'Hello API', path: req.originalUrl });
 });
 
 app.listen(port, host, () => {
