@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - apps/aks-web-frontend
+      - 'apps/aks-web-frontend/**'
   workflow_dispatch:
 
 permissions:
