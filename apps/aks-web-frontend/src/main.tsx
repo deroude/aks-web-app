@@ -8,7 +8,7 @@ import App from './app/app';
 const oidcConfig = {
   authority: "https://node-seed.eu.auth0.com/",
   client_id: "qrPpGPIQXawU9bpWg64frEXIEOSb9mkX",
-  redirect_uri: "http://localhost:4200/callback",
+  redirect_uri: window.location.origin,
   // ...
 };
 
