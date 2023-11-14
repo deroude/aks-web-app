@@ -9,16 +9,13 @@ metadata:
     helm.sh/chart: {{ include "helm-chart.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
     - http:
         paths:
-        - path: /api(/|$)(.*)
-          pathType: ImplementationSpecific
+        - path: /
+          pathType: PathPrefix
           backend:
             service:
               name: aks-web-service
